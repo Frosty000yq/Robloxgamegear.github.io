@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #444;
+            color: #fff;
+            padding: 0.5em 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5em 1em;
+            display: inline-block;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .product {
+            margin: 0;
+            padding: 1px;
+            border: 2px solid #ddd;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+        }
+
+
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #555;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            top: 100%;
+        }
+
+        .dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #666;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .products-btn {
+            cursor: pointer;
+        }
+
+        /* Cart Modal Styles */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .cart-modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .remove-btn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+            background-color: #cc0000;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1001;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Roblox Game Gear Store</h1>
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <div class="dropdown">
+            <a href="#" class="products-btn">Products</a>
+            <div class="dropdown-content" id="products-dropdown">
+                <a href="gag-items.html">Grow a garden</a>
+                <a href="mm2knives.html">Murder mystery 2</a>
+                <a href="ps99.html">Pet-sim 99</a>
+            </div>
+        </div>
+        <a href="#" onclick="showCart()">Cart</a>
+        <a href="about.html">About Us</a>
+        <!-- Search bar -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search for products...">
+            <button id="search-btn">Search</button>
+        </div>
+    </nav>
+
+
+    <div class="container">
+
+        <div class="product">
+            <img src="https://tr.rbxcdn.com/e7b2607c12231258a7f1500077d24b56/420/420/Hat/Webp" alt="Nix scythe">
+            <h3>Nix scythe</h3>
+            <p>Nik's Scythe is an ancient knife given to players who helped report bugs to Nikilis or close friends of him. There is no way to obtain it besides being one of Nikilis' friends (given personally by Nikilis through a code entered in-game).</p>
+            <p>Item Value: 25000000<br>
+            Only for trade</p>
+            <button onclick="addToCart('Nix scythe', 'Only for trade')">Add to Cart</button>
+        </div>
+
+        <div class="product">
+            <img src="https://tr.rbxcdn.com/180DAY-d88d8daffd66df050080a322388382f4/420/420/LayeredAccessory/Webp/noFilter" alt="Corrupt">
+            <h3>Corrupt</h3>
+            <p>Corrupt is a unique knife that was originally given to victims of the Data Loss Glitch.[1] It was originally the 2nd rarest knife in the game (after Nik's Scythe), before the Duping Glitch of 2017. It is now only obtainable through trading.</p>
+            <p>$18</p>
+            <button onclick="addToCart('Corrupt', '$18')">Add to Cart</button>
+        </div>
+
+        <div class="product">
+            <img src="https://production-gameflipusercontent.fingershock.com/us-east-1:ddcaf113-59da-488b-bfdd-3384b87a69b5/589f923a-d5da-4a8d-b048-6cf05259bfc1/aae9e45d-97f7-499f-ada2-426ace590080/640x640.webp" alt="Chroma Fang">
+            <h3>Chroma Fang</h3>
+            <p>Chroma Fang is a chroma knife that is obtainable by unboxing it from Knife Box 2 or through trading.</p>
+            <p>$18</p>
+            <button onclick="addToCart('Chroma Fang', '$18')">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="https://tr.rbxcdn.com/180DAY-17c658fd01ee8b7a54fe3cd0214176e7/420/420/Hat/Webp/noFilter" alt="Candy Knife">
+            <h3>Candy Knife</h3>
+            <p>Candy is a godly knife that was originally obtainable by unboxing it from the 2015 Christmas Knife Box during the 2015 Christmas Event. It is now only obtainable through trading as the event has since ended.</p>
+            <p>$18</p>
+            <button onclick="addToCart('Candy Knife', '$18')">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="https://paparoblo.ru/wp-content/uploads/2023/03/ginger.webp" alt="Gingerblade">
+            <h3>Gingerblade</h3>
+            <p>Gingerblade is a godly knife that was originally obtainable by unboxing it from the Christmas Box during the 2018 Christmas Event. It is now only obtainable through trading as the event has since ended.</p>
+            <p>$18</p>
+            <button onclick="addToCart('Gingerblade', '$18')">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="https://i.ebayimg.com/images/g/F~8AAOSwXRxjYAod/s-l1200.jpg" alt="Luger Gun">
+            <h3>Luger Gun</h3>
+            <p>Red Luger is a godly gun that was originally obtainable by crafting a Luger  and 75 Gifts  together during the 2015 Christmas Event. It is now only obtainable through trading as the event has since ended.</p>
+            <p>$18</p>
+            <button onclick="addToCart('Lugar Gun', '$18')">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="https://cdn.nookazon.com/mm2/items/4659626966.png" alt="Nightfire">
+            <h3>Nightfire</h3>
+            <p>Nightfire is a rare gun that is obtainable by unboxing it from Mystery Box 2 or through trading.</p>
+            <p>$18</p>
+            <button onclick="addToCart('Nightfire', '$18')">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="https://tr.rbxcdn.com/180DAY-0d6b199e8c2bffdf637c280a2caf336f/420/420/Hat/Webp/noFilter" alt="Laser">
+            <h3>Laser</h3>
+            <p>Laser is a godly gun that is obtainable by unboxing it from Gun Box 3 or through trading.</p>
+            <p>$18</p>
+            <button onclick="addToCart('Laser', '$18')">Add to Cart</button>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span class="close">&times;</span>
+            <h2>Your Shopping Cart</h2>
+            <div id="cartItems">
+                <p>Your cart is empty!</p>
+            </div>
+            <button class="checkout-btn" onclick="checkout()" style="display: none;" id="checkoutBtn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let cart = [];
+
+        function addToCart(itemName, itemPrice) {
+            cart.push({name: itemName, price: itemPrice, id: Date.now()});
+            showNotification(itemName + ' has been added to your cart!');
+            updateCartDisplay();
+        }
+
+        function showCart() {
+            document.getElementById('cartModal').style.display = 'block';
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p>Your cart is empty!</p>';
+                checkoutBtn.style.display = 'none';
+            } else {
+                let cartHTML = '';
+                cart.forEach((item, index) => {
+                    cartHTML += `
+                        <div class="cart-item">
+                            <div>
+                                <strong>${item.name}</strong><br>
+                                <span>${item.price}</span>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                        </div>
+                    `;
+                });
+                cartItemsDiv.innerHTML = cartHTML;
+                checkoutBtn.style.display = 'block';
+            }
+        }
+
+        function removeFromCart(index) {
+            const removedItem = cart.splice(index, 1)[0];
+            showNotification(removedItem.name + ' has been removed from your cart!');
+            updateCartDisplay();
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Your cart is empty!');
+                return;
+            }
+            showNotification('Proceeding to checkout... (This is a demo)');
+            cart = [];
+            updateCartDisplay();
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 10000);
+        }
+
+        // Close modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('cartModal');
+            const closeBtn = document.querySelector('.close');
+            
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const query = document.getElementById('search-input').value.toLowerCase();
+                const products = document.querySelectorAll('.product');
+
+                products.forEach(product => {
+                    const title = product.querySelector('h3').textContent.toLowerCase();
+                    if (title.includes(query)) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
