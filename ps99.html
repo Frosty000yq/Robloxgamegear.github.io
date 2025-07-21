@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #444;
+            color: #fff;
+            padding: 0.5em 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5em 1em;
+            display: inline-block;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .product {
+            margin: 0;
+            padding: 1px;
+            border: 2px solid #ddd;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+        }
+
+
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #555;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            top: 100%;
+        }
+
+        .dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #666;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .products-btn {
+            cursor: pointer;
+        }
+
+        /* Cart Modal Styles */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .cart-modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .remove-btn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+            background-color: #cc0000;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1001;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Roblox Game Gear Store</h1>
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <div class="dropdown">
+            <a href="#" class="products-btn">Products</a>
+            <div class="dropdown-content" id="products-dropdown">
+                <a href="gag-items.html">Grow a garden</a>
+                <a href="mm2knives.html">Murder mystery 2</a>
+                <a href="ps99.html">Pet-sim 99</a>
+            </div>
+        </div>
+        <a href="#" onclick="showCart()">Cart</a>
+        <a href="about.html">About Us</a>
+        <!-- Search bar -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search for products...">
+            <button id="search-btn">Search</button>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <div class="product">
+            <img src="https://tr.rbxcdn.com/180DAY-c2b6c0efe376d7a86097b7782ba58b5d/150/150/Image/Png/noFilter" alt="Titanic Basketball Cat"">
+            <h3>Titanic Basketball Cat</h3>
+            <p>Exclusive pet in Pet Simulator 99. It can be obtained from earning points in the Infinite Basketball Mode during the Yeet a Basketball Event 2025.</p>
+            <p><strong>Price: $19.99</strong></p>
+            <button onclick="addToCart('Titanic Basketball Cat', '$19.99')">Add to Cart</button>
+        </div>
+        <div class="product">
+                <img src="https://tr.rbxcdn.com/180DAY-733aa3d71c4a228939df89f39ce16114/150/150/Image/Png/noFilter" alt="Huge Fluffy Cat">
+                <h3>Golden Huge Fluffy Cat</h3>
+                <p>The Huge Gold Fluffy Cat is an Exclusive pet in Pet Simulator 99. It can be obtained when this pet is up for the Huge Rotation.</p>
+                <p><strong>Price: $19.99</strong></p>
+                <button onclick="addToCart('Golden Huge Fluffy Cat', '$19.99')">Add to Cart</button>
+            </div>
+        <div class="product">
+            <img src="https://db.biggames.io/_next/image?url=https%3A%2F%2Fbiggamesapi.io%2Fimage%2F99540557591138&w=256&q=75" alt="Gargantuan Googly Agony">
+            <h3>Gargantuan Googly Agony</h3>
+            <p>The Gargantuan Googly Agony is an Exclusive pet in Pet Simulator 99. It can be obtained from the Exclusive Googly Egg with a chance of 0.01%</p>
+            <p><strong>Price: $50</strong></p>
+            <button onclick="addToCart('Gargantuan Googly Agony', '$19.99')">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="https://tr.rbxcdn.com/180DAY-8c23c6b3572bdeafb05e6ac28a581e6b/150/150/Image/Png/noFilter" alt="Huge Doodle Agony">
+            <h3>Huge Doodle Agony</h3>
+            <p>The Huge Doodle Agony is an Exclusive pet in Pet Simulator 99. It can been obtained from the Doodle Gift.</p>
+            <p><strong>Price: $20</strong></p>
+            <button onclick="addToCart('Huge Doodle Agony', '$19.99')">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="https://tr.rbxcdn.com/180DAY-6794837c101557ad4557d06d635fe3cc/150/150/Image/Png/noFilter" alt="Huge 404 Demon">
+            <h3>Huge 404 Demon</h3>
+            <p>The Huge 404 Demon is an Exclusive pet in Pet Simulator 99. It could've been obtained from the Glitched Gift as a possible reward in the Glitch Event 2024.</p>
+            <p><strong>Price: $20</strong></p>
+            <button onclick="addToCart('Huge 404 Demon', '$19.99')">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="https://tr.rbxcdn.com/180DAY-a2c110960dd78ef591b0cf44e1c93f5d/150/150/Image/Png/noFilter" alt="Huge Player Corgi">
+            <h3>Huge Player Corgi</h3>
+            <p>The Huge Player Corgi is an Exclusive pet in Pet Simulator 99. It can been obtained from the Pet Games Gift.</p>
+            <p><strong>Price: $20</strong></p>
+            <button onclick="addToCart('Huge Player Corgi', '$19.99')">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="https://tr.rbxcdn.com/180DAY-567e47ca471e2710014b43728aff8115/150/150/Image/Png/noFilter" alt="Huge Jetpack Cat">
+            <h3>Huge Jetpack Cat</h3>
+            <p>The Huge Jetpack Cat is an Exclusive pet in Pet Simulator 99. It can be found in Tower Defense AFK Mode.</p>
+            <p><strong>Price: $20</strong></p>
+            <button onclick="addToCart('Huge Jetpack Cat', '$19.99')">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="https://tr.rbxcdn.com/180DAY-2ffd79cc7364278bfd2fa760d54d51ee/150/150/Image/Png/noFilter" alt="Huge Torpedo Shepherd">
+            <h3>Huge Torpedo Shepherd</h3>
+            <p>The Huge Torpedo Shepherd is an Exclusive pet in Pet Simulator 99. It can be obtained from the Hellfire Gift.</p>
+            <p><strong>Price: $20</strong></p>
+            <button onclick="addToCart('Huge Torpedo Shepherd', '$19.99')">Add to Cart</button>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span class="close">&times;</span>
+            <h2>Your Shopping Cart</h2>
+            <div id="cartItems">
+                <p>Your cart is empty!</p>
+            </div>
+            <button class="checkout-btn" onclick="checkout()" style="display: none;" id="checkoutBtn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let cart = [];
+
+        function addToCart(itemName, itemPrice) {
+            cart.push({name: itemName, price: itemPrice, id: Date.now()});
+            showNotification(itemName + ' has been added to your cart!');
+            updateCartDisplay();
+        }
+
+        function showCart() {
+            document.getElementById('cartModal').style.display = 'block';
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p>Your cart is empty!</p>';
+                checkoutBtn.style.display = 'none';
+            } else {
+                let cartHTML = '';
+                cart.forEach((item, index) => {
+                    cartHTML += `
+                        <div class="cart-item">
+                            <div>
+                                <strong>${item.name}</strong><br>
+                                <span>${item.price}</span>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                        </div>
+                    `;
+                });
+                cartItemsDiv.innerHTML = cartHTML;
+                checkoutBtn.style.display = 'block';
+            }
+        }
+
+        function removeFromCart(index) {
+            const removedItem = cart.splice(index, 1)[0];
+            showNotification(removedItem.name + ' has been removed from your cart!');
+            updateCartDisplay();
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Your cart is empty!');
+                return;
+            }
+            showNotification('Proceeding to checkout... (This is a demo)');
+            cart = [];
+            updateCartDisplay();
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 10000);
+        }
+
+        // Close modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('cartModal');
+            const closeBtn = document.querySelector('.close');
+            
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const query = document.getElementById('search-input').value.toLowerCase();
+                const products = document.querySelectorAll('.product');
+
+                products.forEach(product => {
+                    const title = product.querySelector('h3').textContent.toLowerCase();
+                    if (title.includes(query)) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
